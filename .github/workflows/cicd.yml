@@ -69,15 +69,12 @@ jobs:
         env:
           DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
 
-  deploy-to-render:
-    needs: build-and-push-docker
-    runs-on: ubuntu-latest
-    # Pasamos el secreto a env y luego evaluamos si no está vacío
-    env:
-      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-    if: ${{ env.RENDER_DEPLOY_HOOK_URL != '' }}
-    steps:
-      - name: Trigger Render deploy via Deploy Hook
-        run: |
-          curl -sSf -X POST "$RENDER_DEPLOY_HOOK_URL"
-          echo "Render deploy triggered."
+deploy-to-render:
+  needs: build-and-push-docker
+  runs-on: ubuntu-latest
+  if: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}
+  steps:
+    - name: Trigger Render deploy via Deploy Hook
+      run: |
+        curl -sSf -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        echo "Render deploy triggered."
