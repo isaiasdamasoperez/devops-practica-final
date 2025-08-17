@@ -11,7 +11,8 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,7 +32,8 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -42,7 +44,6 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: docker.io
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
@@ -64,12 +65,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Verify push
-  run: echo "Pushed: ${DOCKER_USER}/${IMAGE_NAME}"
-  env:
-    DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
-
-
-
+        run: "echo Pushed: ${DOCKER_USER}/${IMAGE_NAME}"
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
 
   deploy-to-render:
     needs: build-and-push-docker
