@@ -64,9 +64,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Verify push
-  run: |
-    echo "Pushed: ${DOCKER_USER}/${IMAGE_NAME}"
-  env: DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}"
+  run: echo "Pushed: ${DOCKER_USER}/${IMAGE_NAME}"
+  env:
+    DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
+
+
 
 
   deploy-to-render:
